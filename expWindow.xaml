@@ -1,0 +1,33 @@
+﻿<Window x:Class="expWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:keyboardmgr2"
+        mc:Ignorable="d"
+        Background="{DynamicResource backgroundColor1}" Title="错误" Height="415" Width="500" WindowStyle="ToolWindow" ResizeMode="NoResize" Closing="Window_Closing">
+
+    <Grid Margin="16,12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Label Content="程序运行时遇到严重错误。" FontSize="23" FontWeight="Light" Margin="0,0,0,10"/>
+        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+            <TextBlock x:Name="TextBlock1" TextWrapping="Wrap" FontFamily="Microsoft YaHei UI" FontSize="12"/>
+        </ScrollViewer>
+        <Grid Grid.Row="2" Margin="0,12,0,0">
+            <Button x:Name="CopyButton" Style="{DynamicResource DefaultButton}"
+                    FontFamily="{DynamicResource iconFont}" FontSize="16" Content="{DynamicResource Icon.Copy}"
+                    HorizontalAlignment="Left" Height="33" Width="40" Click="CopyButton_Click"/>
+            <Button Style="{DynamicResource DefaultButton}" Content="退出" HorizontalAlignment="Right"
+                    Height="43" Width="93" Click="Button_Click"/>
+        </Grid>
+        <Popup x:Name="MyPopup" PlacementTarget="{Binding ElementName=CopyButton}" StaysOpen="False" Width="50" Height="70">
+            <Grid Background="{DynamicResource ButtonBackgroundColor}" Height="30" Width="70">
+                <Label Content="已复制！" FontSize="12" />
+            </Grid>
+        </Popup>
+    </Grid>
+</Window>

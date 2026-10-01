@@ -1,0 +1,385 @@
+﻿<Window x:Name="MainWindow1" x:Class="MainWindow1"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:keyboardmgr2"
+        mc:Ignorable="d"
+        Title="键鼠管家"
+        Width="640"
+        Height="470"
+        MinWidth="640"
+        MinHeight="470"
+        Background="{DynamicResource backgroundColor1}"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+        Loaded="Window_Loaded"
+        Closing="MainWindow1_Closing"
+        Icon="/appiconnew.ico">
+
+
+    <Grid x:Name="RootGrid" Margin="10" Background="Transparent">
+        <TabControl x:Name="TabControl1" FontSize="14"
+                     Background="{DynamicResource backgroundColor1}" SelectionChanged="TabControl1_SelectionChanged">
+
+            <TabItem Header="欢迎">
+                <Grid Background="{DynamicResource backgroundColor1}" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label x:Name="WelcomeText" Content="欢迎使用键鼠管家！" FontSize="23" FontWeight="Light"/>
+                    <TextBlock x:Name="TestTip" Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                               MaxWidth="494" Margin="0,0,0,20" TextWrapping="Wrap"
+                               Text="注意：测试版的程序部分功能极不稳定、包含许多未完成的特性（这些功能都标有[Beta]），不建议日常使用。"
+                               Visibility="Collapsed"/>
+                    <StackPanel Grid.Row="2" Orientation="Horizontal">
+                        <Button Style="{DynamicResource LinkButton}" Content="交流论坛" Click="Button_Click_1"/>
+                        <Button Style="{DynamicResource LinkButton}" Content="加入Q群" Margin="12,0,0,0" Click="Button_Click_2"/>
+                    </StackPanel>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="连点">
+                <Grid Background="{DynamicResource backgroundColor1}" Margin="10,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label Content="连点" FontSize="23" FontWeight="Light"/>
+                    <StackPanel Grid.Row="1" Margin="0,8,0,0">
+                        <RadioButton x:Name="RadioButton1" Content="左键连点" IsChecked="True" GroupName="Click"/>
+                        <RadioButton x:Name="RadioButton2" Content="右键连点" Margin="0,8,0,0" GroupName="Click"/>
+                        <RadioButton x:Name="RadioButton3" Content="键盘按键连点" Margin="0,8,0,0" GroupName="Click"/>
+                        <StackPanel x:Name="KeyPressStackPanel" Orientation="Horizontal" Margin="0,8,0,0" Visibility="Collapsed">
+                            <Label Content="要发送的键盘按键：" VerticalAlignment="Center"/>
+                            <TextBox x:Name="KeyTextbox1" InputMethod.IsInputMethodEnabled="False" Height="32" Width="173"
+                                     VerticalContentAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput">
+                                <TextBox.CommandBindings>
+                                    <CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/>
+                                </TextBox.CommandBindings>
+                            </TextBox>
+                        </StackPanel>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Margin="0,18,0,0">
+                        <StackPanel Orientation="Vertical">
+                            <CheckBox x:Name="CheckBox1" Content="连点速度随机偏移" Click="CheckBox1_Click"/>
+                            <CheckBox x:Name="CheckBox2" Content="连点位置随机偏移（仅鼠标连点有效）" Margin="0,8,0,0"/>
+                            <CheckBox x:Name="CheckBox4" Content="模拟长按" Margin="0,8,0,0" Click="CheckBox4_Click"/>
+                            <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                                <CheckBox x:Name="CheckBox3" Content="自定义光标位置（仅鼠标连点有效）" Click="CheckBox3_Click"/>
+                                <TextBox x:Name="Textbox2" InputMethod.IsInputMethodEnabled="False" Height="32" Width="113"
+                 Margin="12,-6,0,0" VerticalContentAlignment="Center" Text="0,0"
+                 PreviewTextInput="Textbox2_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown">
+                                    <TextBox.CommandBindings>
+                                        <CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/>
+                                    </TextBox.CommandBindings>
+                                </TextBox>
+                            </StackPanel>
+                        </StackPanel>
+                    </StackPanel>
+                        <Grid Grid.Row="4" Margin="12,0,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="113"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Label x:Name="IntervalLabel" Content="每次发送间隔：（0-1000000）" VerticalAlignment="Center"/>
+                        <TextBox x:Name="Textbox1" Grid.Column="1" InputMethod.IsInputMethodEnabled="False" Height="32"
+                                 Text="10" VerticalContentAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput"
+                                 PreviewKeyDown="TextBox_PreviewKeyDown">
+                            <TextBox.CommandBindings>
+                                <CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/>
+                            </TextBox.CommandBindings>
+                        </TextBox>
+                        <Label x:Name="IntervalUnitLabel" Grid.Column="2" Content="毫秒" VerticalAlignment="Center"/>
+                        <Button Grid.Column="4" Style="{DynamicResource LinkButton}" Content="保存预设" Margin="0,6,16,0" Click="Button_Click_7"/>
+                        <Button Grid.Column="5" Style="{DynamicResource DefaultButton}" Content="开始" Height="36" Width="79" Click="Button_Click_3"/>
+                    </Grid>
+                </Grid>
+
+            </TabItem>
+            <TabItem Header="连发">
+                <Grid Background="{DynamicResource backgroundColor1}" Margin="6,4,6,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="190"/>
+                        <ColumnDefinition Width="12"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style x:Key="RapidFireItemCommandButton" TargetType="Button" BasedOn="{StaticResource DefaultButton}">
+                            <Setter Property="Width" Value="28"/>
+                            <Setter Property="Height" Value="28"/>
+                            <Setter Property="Padding" Value="0"/>
+                            <Setter Property="FontFamily" Value="{DynamicResource iconFont}"/>
+                            <Setter Property="FontSize" Value="15"/>
+                        </Style>
+                    </Grid.Resources>
+
+                    <StackPanel Grid.ColumnSpan="3" Margin="2,0,0,12">
+                        <TextBlock Text="连发" FontSize="24" FontWeight="Light" Margin="0,5,0,0"/>
+                        <TextBlock Text="按列表顺序逐条发送，每条发送后自动按 Enter" Opacity="0.68" Margin="0,3,0,0"/>
+                    </StackPanel>
+
+                    <Border Grid.Row="1" Grid.Column="0" Style="{DynamicResource CardBorderStyle}">
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid Margin="12,10,12,8">
+                                <TextBlock Text="连发项" FontWeight="SemiBold"/>
+                                <TextBlock x:Name="TxtItemCounter" Text="0 项" HorizontalAlignment="Right" Opacity="0.58" FontSize="12" VerticalAlignment="Center"/>
+                            </Grid>
+                            <ListBox x:Name="SendItemList" Grid.Row="1" Margin="6,0" BorderThickness="0" Background="Transparent"
+                                     SelectionChanged="SendItemList_SelectionChanged"/>
+                            <Grid Grid.Row="2" Margin="8,7,8,8">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button x:Name="BtnAddItem" Style="{StaticResource RapidFireItemCommandButton}" Content="&#xE710;" ToolTip="新增文字项" Click="BtnAddItem_Click"/>
+                                    <Button Style="{StaticResource RapidFireItemCommandButton}" Content="&#xE91B;" ToolTip="插入图片" Margin="5,0,0,0" Click="BtnAddImage_Click"/>
+                                    <Border Width="1" Height="18" Background="{DynamicResource ButtonBorderColor}" Opacity="0.45" Margin="7,0,2,0"/>
+                                    <Button x:Name="BtnMoveItemUp" Style="{StaticResource RapidFireItemCommandButton}" Content="&#xE70E;" ToolTip="上移当前项" Margin="5,0,0,0" Click="BtnMoveItemUp_Click"/>
+                                    <Button x:Name="BtnMoveItemDown" Style="{StaticResource RapidFireItemCommandButton}" Content="&#xE70D;" ToolTip="下移当前项" Margin="5,0,0,0" Click="BtnMoveItemDown_Click"/>
+                                    <Button x:Name="BtnDeleteItem" Style="{StaticResource RapidFireItemCommandButton}" Content="&#xE74D;" ToolTip="删除当前项" Margin="5,0,0,0" Click="BtnDeleteItem_Click"/>
+                                </StackPanel>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="2" Style="{DynamicResource CardBorderStyle}">
+                        <Grid Margin="12">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="条目内容" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <Grid Grid.Row="1">
+                                <RichTextBox x:Name="RichTextBox1" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                             Foreground="{DynamicResource ButtonForegroundColor}" Background="{DynamicResource ControlFillColor}"
+                                             BorderBrush="{DynamicResource ButtonBorderColor}" BorderThickness="1" FontSize="14" Padding="9"
+                                             AcceptsTab="True" TextChanged="RichTextBox1_TextChanged"/>
+                                <TextBlock x:Name="SendEditorWatermark" Text="输入本条消息要发送的文字" Opacity="0.5" Margin="15,10"
+                                           VerticalAlignment="Top" IsHitTestVisible="False"/>
+                                <Border x:Name="SendImageEditor" Visibility="Collapsed" Background="{DynamicResource ControlFillColor}"
+                                        BorderBrush="{DynamicResource ButtonBorderColor}" BorderThickness="1" Padding="12">
+                                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Image x:Name="SendImagePreview" Width="220" Height="185" Stretch="Uniform"/>
+                                        <TextBlock x:Name="SendImageFileName" HorizontalAlignment="Center" Margin="0,8,0,0" TextTrimming="CharacterEllipsis" MaxWidth="260"/>
+                                        <TextBlock Text="发送时将通过剪贴板粘贴图片并按 Enter" Opacity="0.6" FontSize="12" Margin="0,4,0,0"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </Grid>
+                    </Border>
+
+                    <Border Grid.Row="2" Grid.ColumnSpan="3" Style="{DynamicResource CardBorderStyle}" Margin="0,12,0,0" Padding="12,10">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="76"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="间隔" VerticalAlignment="Center"/>
+                            <TextBox x:Name="TxtSendInterval" Grid.Column="1" InputMethod.IsInputMethodEnabled="False" Height="30" Margin="8,0,0,0"
+                                     Text="100" VerticalContentAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput" PreviewKeyDown="TextBox_PreviewKeyDown"/>
+                            <TextBlock Grid.Column="2" Text="毫秒" VerticalAlignment="Center" Margin="7,0,16,0" Opacity="0.68"/>
+                            <CheckBox x:Name="ChkSendLoop" Grid.Column="3" Content="循环发送" VerticalAlignment="Center"/>
+                            <StackPanel Grid.Column="4" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,12,0">
+                                <Button Style="{DynamicResource LinkButton}" Content="打开" Margin="0,0,12,0" Click="BtnSendOpen_Click"/>
+                                <Button Style="{DynamicResource LinkButton}" Content="保存" Click="BtnSendSave_Click"/>
+                            </StackPanel>
+                            <Button x:Name="BtnSendStart" Grid.Column="5" Style="{DynamicResource DefaultButton}" Content="开始连发" Height="34" Width="96" Click="BtnSendStart_Click"/>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </TabItem>
+            <TabItem Header="摸鱼">
+                <Grid Background="{DynamicResource backgroundColor1}" Margin="10,8">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <Label Content="摸鱼工具箱" FontSize="23" FontWeight="Light"/>
+                        <CheckBox x:Name="LoafToggle" Content="启用摸鱼" Margin="0,8,0,0" Click="CheckBox_Click"/>
+                    </StackPanel>
+                    <StackPanel x:Name="LoafGrid" Grid.Row="1" Margin="0,18,0,0">
+                        <Label Content="摸鱼快捷键（老板键）"/>
+                        <TextBox x:Name="KeyTextbox2" InputMethod.IsInputMethodEnabled="False" Height="32" Width="173"
+                                 HorizontalAlignment="Left" VerticalContentAlignment="Center" PreviewTextInput="TextBox_PreviewTextInput" Text="Shift+Z">
+                            <TextBox.CommandBindings>
+                                <CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/>
+                            </TextBox.CommandBindings>
+                        </TextBox>
+                        <Button Style="{DynamicResource DefaultButton}" Content="选取窗体" HorizontalAlignment="Left"
+                                Height="36" Width="173" Margin="0,14,0,0"/>
+                        <Label x:Name="SelectedWindowHwnd" Content="选取的窗体句柄：暂无" Margin="0,6,0,0"/>
+                        <Label x:Name="NewMessage" Content="更多功能敬请期待" Margin="0,10,0,0"/>
+                    </StackPanel>
+                    <Grid Grid.Row="2">
+                        <Button x:Name="LoafHelpButton" Style="{DynamicResource LinkButton}" Content="了解此功能"
+                                HorizontalAlignment="Left" Click="LoafHelpButton_Click"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <Label Content="注意：此功能仅在本程序运行时有效！" VerticalAlignment="Center" Margin="0,0,16,0"/>
+                            <Button Style="{DynamicResource DefaultButton}" Content="应用" Height="36" Width="79" Click="Button_Click_4"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="选项">
+                <Grid Background="{DynamicResource backgroundColor1}">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                        <StackPanel Margin="10,8,16,12">
+                            <TextBlock Text="行为" FontSize="23" FontWeight="Light"/>
+                            <CheckBox x:Name="DoAutoStartCheckbox" Content="开机自启动" Margin="8,10,0,0"/>
+
+                            <TextBlock Text="外观" FontSize="23" FontWeight="Light" Margin="0,22,0,8"/>
+                            <Grid Margin="8,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="130"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="主题" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="Combobox1" Grid.Column="1" Style="{DynamicResource comboboxStyle}" Width="120" Margin="8,3" IsTextSearchEnabled="False">
+                                    <ComboBoxItem Content="跟随系统"/>
+                                    <ComboBoxItem Content="浅色"/>
+                                    <ComboBoxItem Content="深色"/>
+                                </ComboBox>
+                                <CheckBox x:Name="IsMicaEnabledCheckbox" Grid.Column="2" Content="启用云母效果（仅限Win11)" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                <Label Grid.Row="1" Content="悬浮窗" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="Combobox2" Grid.Row="1" Grid.Column="1" Style="{DynamicResource comboboxStyle}" Width="120" Margin="8,3" IsTextSearchEnabled="False">
+                                    <ComboBoxItem Content="始终显示"/>
+                                    <ComboBoxItem Content="始终隐藏"/>
+                                    <ComboBoxItem Content="自动收缩"/>
+                                </ComboBox>
+                                <CheckBox x:Name="DoFloatingWindowTopmost" Grid.Row="1" Grid.Column="2" Content="悬浮窗置顶" VerticalAlignment="Center" Margin="12,0,0,0"/>
+                                <Label Grid.Row="2" Content="启动页面" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="StartupTabComboBox" Grid.Row="2" Grid.Column="1" Style="{DynamicResource comboboxStyle}" Width="120" Margin="8,3" IsTextSearchEnabled="False">
+                                    <ComboBoxItem Content="欢迎"/>
+                                    <ComboBoxItem Content="连点"/>
+                                    <ComboBoxItem Content="连发"/>
+                                    <ComboBoxItem Content="摸鱼"/>
+                                    <ComboBoxItem Content="选项"/>
+                                    <ComboBoxItem Content="关于"/>
+                                </ComboBox>
+                            </Grid>
+
+                            <TextBlock Text="快捷键" FontSize="23" FontWeight="Light" Margin="0,22,0,8"/>
+                            <Grid Margin="8,0,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="120"/>
+                                    <ColumnDefinition Width="173"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Label Content="终止任务" VerticalAlignment="Center"/>
+                                <TextBox x:Name="KeyTextbox3" Grid.Column="1" Text="Ctrl+G" InputMethod.IsInputMethodEnabled="False" Height="32" Margin="0,3" PreviewTextInput="TextBox_PreviewTextInput">
+                                    <TextBox.CommandBindings><CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/></TextBox.CommandBindings>
+                                </TextBox>
+                                <Label Grid.Row="1" Content="连点开关" VerticalAlignment="Center"/>
+                                <TextBox x:Name="KeyTextbox4" Grid.Row="1" Grid.Column="1" InputMethod.IsInputMethodEnabled="False" Height="32" Margin="0,3" PreviewTextInput="TextBox_PreviewTextInput">
+                                    <TextBox.CommandBindings><CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/></TextBox.CommandBindings>
+                                </TextBox>
+                                <Label Grid.Row="2" Content="连发开关" VerticalAlignment="Center"/>
+                                <TextBox x:Name="KeyTextbox5" Grid.Row="2" Grid.Column="1" InputMethod.IsInputMethodEnabled="False" Height="32" Margin="0,3" PreviewTextInput="TextBox_PreviewTextInput">
+                                    <TextBox.CommandBindings><CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/></TextBox.CommandBindings>
+                                </TextBox>
+                                <Label Grid.Row="3" Content="显示/隐藏主界面" VerticalAlignment="Center"/>
+                                <TextBox x:Name="KeyTextbox6" Grid.Row="3" Grid.Column="1" InputMethod.IsInputMethodEnabled="False" Height="32" Margin="0,3" PreviewTextInput="TextBox_PreviewTextInput">
+                                    <TextBox.CommandBindings><CommandBinding Command="ApplicationCommands.Paste" CanExecute="CommandBinding_CanExecute1"/></TextBox.CommandBindings>
+                                </TextBox>
+                            </Grid>
+                            <TextBlock Text="注：所有快捷键有关的设置需重启程序后生效。" Margin="8,8,0,0"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Style="{DynamicResource DefaultButton}" Content="应用" HorizontalAlignment="Right"
+                            Height="36" Width="79" Margin="0,6,12,6" Click="Button_Click"/>
+                </Grid>
+            </TabItem>
+            <TabItem Header="关于">
+                <Grid Background="{DynamicResource backgroundColor1}" Margin="24,20,24,18">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="96"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <Border Width="80" Height="80" CornerRadius="16" Background="{DynamicResource ControlFillColor}"
+                                    HorizontalAlignment="Left" VerticalAlignment="Top">
+                            <Image Width="64" Height="64" Source="{DynamicResource aboutIcon}"/>
+                        </Border>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="8,0,0,0">
+                            <TextBlock x:Name="ProductName" Text="键鼠管家" FontSize="25" FontWeight="Light"/>
+                            <TextBlock Text="一个好用的键鼠工具箱" FontSize="13" Opacity="0.62" Margin="0,4,0,0"/>
+                            <TextBlock x:Name="VerLabel" Text="版本号：" FontSize="14" Margin="0,13,0,0"/>
+                            <TextBlock x:Name="GitID" Text="Git ID：" FontSize="12" Opacity="0.62" Margin="0,4,0,0" TextWrapping="Wrap"/>
+                        </StackPanel>
+
+                        <Border Grid.Row="1" Grid.ColumnSpan="2" Height="1" Background="{DynamicResource ButtonBorderColor}"
+                                    Opacity="0.22" Margin="0,20,0,14"/>
+                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Margin="0,35,0,0" TextWrapping="Wrap" LineHeight="20" Opacity="0.72"
+                                       Text="提供连点、列表连发、全局热键和悬浮窗等功能。支持 Windows 10 1809 及更高版本。"/>
+                    </Grid>
+
+                    <Grid Grid.Row="1" Margin="4,12,4,0">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Style="{DynamicResource LinkButton}" Content="更新日志" Margin="0,0,18,0" Click="UpdDatabtn_Click" Height="23"/>
+                            <ContentControl x:Name="UpdateProgressRing" Width="20" Height="20" Margin="0,0,12,0"
+                                            Visibility="Collapsed" ToolTip="正在检查更新"
+                                            Style="{DynamicResource ProgressRingStyle}"/>
+                            <Button x:Name="UpdateButton" Style="{DynamicResource DefaultButton}" Content="检查更新" Height="36" Width="96" Click="UpdButton_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Grid>
+            </TabItem>
+
+
+        </TabControl>
+        <ToggleButton x:Name="pinButton" Style="{DynamicResource topmostButtonStyle}"
+                      FontFamily="{DynamicResource iconFont}" FontSize="18" Content="{DynamicResource Icon.Pin}"
+                      HorizontalAlignment="Right" VerticalAlignment="Top" Height="36" Width="43"
+                      Margin="0,-4,6,0" Click="ToggleButton_Click"/>
+    </Grid>
+</Window>
